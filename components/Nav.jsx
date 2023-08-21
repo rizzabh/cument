@@ -8,13 +8,14 @@ import { signIn, signOut, useSession, getProviders } from "next-auth";
 const Nav = () => {
   const isUserLoggedIn = true;
   const [providers, setProviders] = useState(null);
+  const [toggleDropdown, settoggleDropdown] = useState(false);
   useEffect(() => {
-    const setProviders = async () => {
+    const setUpProviders = async () => {
       const response = await getProviders();
       setProviders(response);
     };
 
-    setProviders();
+    setUpProviders();
   }, []);
   return (
     <nav className="flex-between w-full mb-15 pt-3">
@@ -38,6 +39,15 @@ const Nav = () => {
               {"  "}
               Sign Out{"  "}
             </button>
+            <Link href="/profile">
+              <Image
+                src="assets/user.svg"
+                width={38}
+                height={38}
+                className="rounded-full"
+                alt="profile"
+              ></Image>
+            </Link>
           </div>
         ) : (
           <>
@@ -65,8 +75,36 @@ const Nav = () => {
               height={38}
               className="rounded-full"
               alt="profile"
-              onClick={() => {}}
+              onClick={() => settoggleDropdown((prev) => !prev)}
             />
+            {toggleDropdown && (
+              <div className="dropdown">
+                <Link
+                  href="/create-comment"
+                  className="dropdown_link"
+                  onClick={() => settoggleDropdown(false)}
+                >
+                  My Profile
+                </Link>
+                <Link
+                  href="/create-comment"
+                  className="dropdown_link"
+                  onClick={() => settoggleDropdown(false)}
+                >
+                  Comment
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    settoggleDropdown(false);
+                    signOut;
+                  }}
+                  className="mt-5 w-full black_btn"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <>
