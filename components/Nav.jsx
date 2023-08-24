@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { signIn, signOut, useSession, getProviders } from "next-auth";
+import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Nav = () => {
-  const isUserLoggedIn = true;
+  const { data: session } = useSession();
+
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, settoggleDropdown] = useState(false);
   useEffect(() => {
@@ -30,7 +31,7 @@ const Nav = () => {
         <p className="logo_text">Cument</p>
       </Link>
       <div className="sm:flex hidden">
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="flex gap-3 md:gap-5">
             <Link href="/create-prompt" className="black_btn">
               Comment
@@ -41,7 +42,7 @@ const Nav = () => {
             </button>
             <Link href="/profile">
               <Image
-                src="assets/user.svg"
+                src={session?.user.image}
                 width={38}
                 height={38}
                 className="rounded-full"
@@ -67,10 +68,10 @@ const Nav = () => {
       </div>
       {/* Mobile View */}
       <div className="sm:hidden flex relative">
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="flex">
             <Image
-              src="assets/user.svg"
+              src={session?.user.image}
               width={38}
               height={38}
               className="rounded-full"
@@ -97,7 +98,7 @@ const Nav = () => {
                   type="button"
                   onClick={() => {
                     settoggleDropdown(false);
-                    signOut;
+                    signOut();
                   }}
                   className="mt-5 w-full black_btn"
                 >
