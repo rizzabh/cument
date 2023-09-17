@@ -10,7 +10,7 @@ export const connectToDB=async ()=>{
     }
     try {
         await mongoose.connect(process.env.MONGODB_URI,{
-            dbName:"share comment",
+            dbName:"share_comment",
             useNewUrlParser:true,
             useUnifiedTopology:true,
         })
